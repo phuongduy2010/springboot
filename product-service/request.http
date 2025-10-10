@@ -1,0 +1,13 @@
+### GET request to example server
+POST http://localhost:8080/api/product
+Content-Type: application/json
+
+{
+  "name": "iphone 13",
+  "description": "iphone 13",
+  "price": 1200
+}
+###
+###
+GET http://localhost:8080/api/product
+###
