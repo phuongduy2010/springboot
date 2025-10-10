@@ -1,4 +1,4 @@
-package com.nhuy.productservice.model;
+package com.nhuy.productservice.infrastructure.persistence;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Data
-public class Product {
+public class ProductEntity {
     @Id
     private String id;
     private String name;

@@ -3,8 +3,9 @@ package com.nhuy.productservice;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhuy.productservice.dto.ProductRequest;
-import com.nhuy.productservice.repository.ProductRepository;
+import com.nhuy.productservice.api.dto.ProductDto;
+
+import com.nhuy.productservice.infrastructure.persistence.ProductRepositoryAdapter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ class ProductServiceApplicationTests {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductRepositoryAdapter productRepository;
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -48,21 +49,17 @@ class ProductServiceApplicationTests {
     }
     @Test
     void shouldCreateProduct() throws Exception {
-        ProductRequest productRequest = getProductRequest();
+        ProductDto productRequest = getProductRequest();
         String productRequestString = objectMapper.writeValueAsString(productRequest);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(productRequestString))
                 .andExpect(status().isCreated());
-        Assertions.assertEquals(1, productRepository.findAll().size());
+        Assertions.assertEquals(1, productRepository.getAllProducts().size());
     }
 
-    private ProductRequest getProductRequest() {
-        return ProductRequest.builder()
-                .name("iphone 13")
-                .description("iphone 13")
-                .price(BigDecimal.valueOf(1200))
-                .build();
+    private ProductDto getProductRequest() {
+        return new ProductDto("iphone 13","iphone 13", BigDecimal.valueOf(1200));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.nhuy.productservice.dto;
+package com.nhuy.productservice.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
