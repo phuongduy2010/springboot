@@ -36,7 +36,7 @@ public class OrderController {
 
     @GetMapping("getAllOrders")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Page<Order>> getAllOrders(@PageableDefault(page = 0,size=10, sort = "createdAt", direction = Sort.Direction.DESC)
+    public ResponseEntity<List<Order>> getAllOrders(@PageableDefault(page = 0,size=10, sort = "createdAt", direction = Sort.Direction.DESC)
                                                         Pageable pageable){
         return  new ResponseEntity<>(placeOrder.getOrders(pageable), HttpStatus.OK);
     }
@@ -47,20 +47,21 @@ public class OrderController {
         return  placeOrder.getOrderById(orderId);
     }
 
-    @GetMapping()
+    @GetMapping("getOrdersByCustomerId")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Order>> getOrdersByCustomerId(
             @RequestParam(required = false) UUID customerId,
             @PageableDefault(page = 0,size=10, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable
     ){
-        Page<Order> page;
+        List<Order> list;
         if(customerId != null){
-            page = placeOrder.getOrdersByCustomerId(customerId, pageable);
+            list = placeOrder.getOrdersByCustomerId(customerId, pageable);
+
         }
         else {
-            page = placeOrder.getOrders(pageable);
+            list = placeOrder.getOrders(pageable);
         }
-        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

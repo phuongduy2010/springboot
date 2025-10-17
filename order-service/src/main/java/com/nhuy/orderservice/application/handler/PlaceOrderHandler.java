@@ -43,11 +43,14 @@ public class PlaceOrderHandler {
         return repository.find(orderId);
     }
 
-    public  Page<Order> getOrders(Pageable pageable){
+
+    public  List<Order> getOrders(Pageable pageable){
         return repository.findAll(pageable);
     }
 
-    public Page<Order> getOrdersByCustomerId(UUID customerId, Pageable pageable){
+    // @Cacheable(value = ORDER_CACHE, key = "#customerId")
+    @Cacheable(value = "ORDER_CACHE", key = "'customer:' + #customerId + ':page:' + #pageable.paged + ':size:' + #pageable.pageSize")
+    public List<Order> getOrdersByCustomerId(UUID customerId, Pageable pageable){
         return  repository.findByCustomerId(customerId, pageable);
     }
 

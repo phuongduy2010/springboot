@@ -11,7 +11,7 @@ public interface OrderRepositoryPort {
     void save(Order order);
     Order find(UUID id);
     void update(Order order);
-    Page<Order> findAll(Pageable pageable);
+    List<Order> findAll(Pageable pageable);
 
-    Page<Order> findByCustomerId(UUID customerId, Pageable pageable);
+    List<Order> findByCustomerId(UUID customerId, Pageable pageable);
 }

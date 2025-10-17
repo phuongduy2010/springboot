@@ -36,12 +36,12 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
     }
 
     @Override
-    public Page<Order> findAll(Pageable pageable) {
-        return orderJpaRepository.findAll(pageable).map(orderMapper::toDomain);
+    public List<Order> findAll(Pageable pageable) {
+        return orderJpaRepository.findAll(pageable).map(orderMapper::toDomain).getContent();
     }
 
     @Override
-    public Page<Order> findByCustomerId(UUID customerId, Pageable pageable) {
-        return orderJpaRepository.findByCustomerId(customerId, pageable).map(orderMapper::toDomain);
+    public List<Order> findByCustomerId(UUID customerId, Pageable pageable) {
+        return orderJpaRepository.findByCustomerId(customerId, pageable).map(orderMapper::toDomain).getContent();
     }
 }
