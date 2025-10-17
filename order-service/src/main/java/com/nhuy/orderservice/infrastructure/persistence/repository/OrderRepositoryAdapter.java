@@ -3,6 +3,8 @@ package com.nhuy.orderservice.infrastructure.persistence.repository;
 import com.nhuy.orderservice.application.port.OrderRepositoryPort;
 import com.nhuy.orderservice.domain.model.Order;
 import com.nhuy.orderservice.infrastructure.mapper.OrderMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,7 +36,12 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
     }
 
     @Override
-    public List<Order> findAll() {
-        return orderJpaRepository.findAll().stream().map(orderMapper::toDomain).toList();
+    public Page<Order> findAll(Pageable pageable) {
+        return orderJpaRepository.findAll(pageable).map(orderMapper::toDomain);
+    }
+
+    @Override
+    public Page<Order> findByCustomerId(UUID customerId, Pageable pageable) {
+        return orderJpaRepository.findByCustomerId(customerId, pageable).map(orderMapper::toDomain);
     }
 }
