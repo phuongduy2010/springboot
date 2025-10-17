@@ -34,4 +34,10 @@ public class OrderController {
     public List<Order> getAllProducts(){
         return  placeOrder.getOrders();
     }
+
+    @GetMapping("getOrder/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Order getOrderById(@PathVariable UUID orderId){
+        return  placeOrder.getOrderById(orderId);
+    }
 }

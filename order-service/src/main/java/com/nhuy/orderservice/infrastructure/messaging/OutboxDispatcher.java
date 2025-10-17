@@ -31,11 +31,11 @@ public class OutboxDispatcher {
     @Scheduled(fixedDelay = 5000)
     public void flush() {
         if(!this.running.compareAndSet(false,true)){
-            log.info("flushing outbox........");
+//            log.info("flushing outbox........");
             return;
         }
         try {
-            log.info("Start flushing outbox");
+//            log.info("Start flushing outbox");
             List<OutboxEntity> batch = tx.execute(status -> repo.findBatch(PageRequest.of(0, 50)));
             if (batch == null || batch.isEmpty()) {
                 return;
@@ -49,7 +49,7 @@ public class OutboxDispatcher {
                 tx.executeWithoutResult(status -> {
                     e.setProcessed(true);
                     repo.save(e);
-                    log.info("End sending out outbox");
+//                    log.info("End sending out outbox");
                 });
             }
         }
@@ -57,7 +57,7 @@ public class OutboxDispatcher {
             log.error("Error while flushing outbox",e);
         }
         finally {
-            log.info("Start new flushing outbox");
+//            log.info("Start new flushing outbox");
             this.running.set(false);
         }
     }

@@ -9,6 +9,8 @@ import com.nhuy.orderservice.domain.model.OrderStatus;
 import com.nhuy.orderservice.domain.model.event.OrderPlaced;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +23,9 @@ import java.util.UUID;
 public class PlaceOrderHandler {
     private final OrderRepositoryPort repository;
     private final OutboxPort outboxPort;
-
+    public static final String ORDER_CACHE = "orders";
     @Transactional
+    @CachePut(value = ORDER_CACHE, key="#result")
     public UUID handle(PlaceOrderCommand command){
         var orderId = UUID.randomUUID();
         var items = command.items().stream().map(
@@ -33,8 +36,13 @@ public class PlaceOrderHandler {
         outboxPort.enqueue(new OrderPlaced(orderId, command.customerId(), OffsetDateTime.now(), items, 1));
         return  orderId;
     }
+    @Cacheable(value = ORDER_CACHE, key = "#orderId")
+    public Order getOrderById(UUID orderId){
+        return repository.find(orderId);
+    }
 
     public List<Order> getOrders(){
         return repository.findAll();
     }
+
 }
